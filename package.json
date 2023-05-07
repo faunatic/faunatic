@@ -7,6 +7,23 @@
   "engines": {
     "node": ">=18.x.x"
   },
+  "bugs": {
+    "url": "https://github.com/faunatic/faunatic/issues"
+  },
+  "repository": {
+    "directory": "https://github.com",
+    "url": "https://github.com/faunatic/faunatic",
+    "type": "github"
+  },
+  "homepage": "https://github.com/faunatic/faunatic",
+  "keywords": [
+    "fauna",
+    "faunatic",
+    "fauna wrapper",
+    "fauna orm",
+    "fauna module"
+  ],
+  "license": "MIT",
   "scripts": {
     "prepublishOnly": "yarn build",
     "start": "node --experimental-specifier-resolution=node ./dist/index.js",
