@@ -1,0 +1,4 @@
+# Exclude dependencies
+node_modules/
+dist/
+_old/

@@ -1,0 +1,32 @@
+{
+  "name": "faunatic",
+  "version": "1.0.0-alpha",
+  "main": "dist/index.js",
+  "type": "module",
+  "author": "Visualizememe",
+  "engines": {
+    "node": ">=18.x.x"
+  },
+  "scripts": {
+    "prepublishOnly": "yarn build",
+    "start": "node --experimental-specifier-resolution=node ./dist/index.js",
+    "dev": "yarn build && yarn start",
+    "clean": "gts clean",
+    "fix": "gts fix",
+    "build": "tsc -p . --skipLibCheck"
+  },
+  "dependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/node": "^18.16.1",
+    "faunadb": "^4.8.0",
+    "ts-deepmerge": "^6.0.3",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0"
+  }
+}
