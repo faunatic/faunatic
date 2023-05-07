@@ -1,7 +1,7 @@
 <div align="center">
 	<br />
 	<p>
-		<a href="https://discord.js.org"><img src="./_readme/cover.png" width="400" alt="discord.js" /></a>
+		<a href="https://www.npmjs.com/package/faunatic"><img src="_readme/cover.png" width="400" alt="faunatic logo" /></a>
 	</p>
 	<br />
 	<p>
@@ -65,7 +65,8 @@ import { faunatic } from "./faunatic";
 const UserSchema = new faunatic.DefinedSchema(
     z.object({
         name: z.string(),
-        email: z.string().email()
+        email: z.string()
+            .email()
     })
 );
 
@@ -180,7 +181,6 @@ listedUsers.data.map(user => {
     console.log(`User: ${ user.id }`); // => "User: XXX"
 });
 ```
-
 
 ---
 
