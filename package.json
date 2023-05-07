@@ -1,6 +1,6 @@
 {
   "name": "faunatic",
-  "version": "1.0.2-alpha",
+  "version": "1.0.3-alpha",
   "main": "dist/index.js",
   "type": "module",
   "author": "Visualizememe",
