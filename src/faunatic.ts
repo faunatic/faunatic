@@ -700,12 +700,14 @@ export namespace faunatic {
         /**
          * Updates a single document by its id/ref
          */
-        public update (id: Id, data: T["out"]): Promise<Doc | null> {
+        public async update (id: Id, data: T["out"]): Promise<Doc | null> {
             const q = this.fql;
+            const builtUpdate = await this.build(data);
+
             const rawQuery = q.Let({
                 ref: this._ref(id),
                 exists: q.Exists(q.Var("ref")),
-                data,
+                data: builtUpdate,
                 updated: q.Update(
                     q.Var("ref"),
                     q.Var("data")
@@ -726,8 +728,18 @@ export namespace faunatic {
          * Updates many documents by their ids/refs.
          * @param docs
          */
-        public updateMany (docs: { id: Id; data: T["out"] }[]): Promise<Doc[]> {
+        public async updateMany (docs: { id: Id; data: T["out"] }[]): Promise<Doc[]> {
             const q = this.fql;
+            const builtDocs = await Promise.all(
+                docs.map(async d => {
+                    const built = await this.build(d.data);
+                    return {
+                        ...d,
+                        data: built
+                    };
+                })
+            );
+
             const rawQuery = q.Let({
                 docs,
                 updated: q.Map(
@@ -754,11 +766,12 @@ export namespace faunatic {
         /**
          * Replaces a single document entirely by the new data
          */
-        public replace (id: Id, data: T["out"]): Promise<Doc | null> {
+        public async replace (id: Id, data: T["out"]): Promise<Doc | null> {
             const q = this.fql;
+            const built = await this.build(data);
             const rawQuery = q.Let({
                 ref: this._ref(id),
-                data,
+                data: built,
                 exists: q.Exists(q.Var("ref")),
                 replaced: q.Replace(
                     q.Var("ref"),
@@ -781,10 +794,20 @@ export namespace faunatic {
         /**
          * Replaces many documents entirely by the new data provided.
          */
-        public replaceMany (docs: { id: Id; data: T["out"] }[]): Promise<Doc[]> {
+        public async replaceMany (docs: { id: Id; data: T["out"] }[]): Promise<Doc[]> {
             const q = this.fql;
+            const builtDocs = await Promise.all(
+                docs.map(async d => {
+                    const built = await this.build(d.data);
+                    return {
+                        ...d,
+                        data: built
+                    };
+                })
+            );
+
             const rawQuery = q.Let({
-                docs,
+                docs: builtDocs,
                 replaced: q.Map(
                     q.Var("docs"),
                     q.Lambda("doc", q.Let({
@@ -867,10 +890,12 @@ export namespace faunatic {
         /**
          * Creates a single document in the given collection with the data provided
          */
-        public create (data: T["out"] | T["inp"], docExtra: any = null): Promise<Doc> {
+        public async create (data: T["out"] | T["inp"], docExtra: any = null): Promise<Doc> {
             const q = this.fql;
+            const builtData = await this.build(data);
+
             const rawQuery = q.Let({
-                data,
+                data: builtData,
                 doc: q.Create(
                     this._coll(),
                     {
@@ -886,10 +911,20 @@ export namespace faunatic {
         /**
          * Creates many documents in the given collection with the data provided.
          */
-        public createMany (docs: { data: T["out"]; docExtra?: any; }[], docExtra: any = null): Promise<Doc[]> {
+        public async createMany (docs: { data: T["out"]; docExtra?: any; }[], docExtra: any = null): Promise<Doc[]> {
             const q = this.fql;
+            const builtDocs = await Promise.all(
+                docs.map(async d => {
+                    const built = await this.build(d.data);
+                    return {
+                        ...d,
+                        data: built
+                    };
+                })
+            );
+
             const rawQuery = q.Let({
-                docs,
+                docs: builtDocs,
                 created: q.Map(
                     q.Var("docs"),
                     q.Lambda("doc", q.Let({
